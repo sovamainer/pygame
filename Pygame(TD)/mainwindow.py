@@ -3,10 +3,40 @@ import sys
 
 import pygame
 
+
 if __name__ == '__main__':
     pygame.init()
+
 size = width, height = 1200, 700
 screen = pygame.display.set_mode(size)
+clock = pygame.time.Clock()
+v = 20
+
+all_sprites = pygame.sprite.Group()
+
+backg = pygame.image.load("pageTD.png")
+backg = pygame.transform.scale(backg, (1200, 700))
+screen.blit(backg, (0, 0))
+
+tower = pygame.image.load("pngwing.com.png")
+tower = pygame.transform.scale(tower, (200, 200))
+screen.blit(tower, (510, 180))
+
+unit_sprites = pygame.sprite.Group()
+
+life = 2
+
+count_death_mob = 0
+level = 1
+
+
+font = pygame.font.Font(None, 50)
+text = font.render(f"Уровень {level}", True, (0, 0, 0))
+text_x = width // 3
+text_y = 10
+text_w = text.get_width()
+text_h = text.get_height()
+screen.blit(text, (text_x, text_y))
 
 
 def terminate():
@@ -15,9 +45,10 @@ def terminate():
 
 
 def start_screen():
+    global start
     intro_text = ["Tower Defense", "",
                   "На вашу базу нападают монстры. Сможете ли вы отбиться?",
-                  "Нажмите любую кнопку чтобы начать"]
+                  "Нажмите на любую кнопку мыши, чтобы начать"]
 
     fon = pygame.transform.scale(load_image('startscreen.jpg'), size)
     screen.blit(fon, (0, 0))
@@ -36,8 +67,7 @@ def start_screen():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 terminate()
-            elif event.type == pygame.KEYDOWN or \
-                    event.type == pygame.MOUSEBUTTONDOWN:
+            elif event.type == pygame.MOUSEBUTTONDOWN:
                 return
         pygame.display.flip()
 
@@ -58,89 +88,98 @@ def load_image(name, colorkey=None):
     return image
 
 
-backg = pygame.image.load("pageTD.png")
-backg = pygame.transform.scale(backg, (1200, 700))
-screen.blit(backg, (0, 0))
-
-
-tower = pygame.image.load("pngwing.com.png")
-tower = pygame.transform.scale(tower, (200, 200))
-screen.blit(tower, (510, 180))
-
-unit_sprites = pygame.sprite.Group()
-
-
-
 class Circle(pygame.sprite.Sprite):
-    def __init__(self, x, y, radius):
-        super().__init__(unit_sprites)
+    image_1 = pygame.transform.scale(pygame.image.load('i.png'), (50, 50))
+    def __init__(self, x, y, r, v, clock):
+        super().__init__(unit_sprites, all_sprites)
         self.x = x
         self.y = y
-        self.r = radius
+        self.r = r
+        self.v = v
+        self.clock = clock
+        self.image = Circle.image_1
+        self.mask = pygame.mask.from_surface(self.image)
+        self.true = True
 
     def move(self):
-        global pos_x, pos_y #, running
-        #if pos_x >= 1200:
-        #    start_screen()
-            #running = False
-        if right:
-            pos_x += v * clock.tick() / 250
-            pygame.draw.circle(screen, (255, 0, 0), (int(pos_x), int(pos_y)), 10)
-        elif left:
-            pass
-        elif up:
-            pos_y -= v * clock.tick() / 250
-            pygame.draw.circle(screen, (255, 0, 0), (int(pos_x), int(pos_y)), 10)
-        elif down:
-            pos_y += v * clock.tick() / 250
-            pygame.draw.circle(screen, (255, 0, 0), (int(pos_x), int(pos_y)), 10)
+        global count_death_mob
+        if self.true:
+            if self.x < 200:
+                self.x += self.v * self.clock.tick() / 250
+                screen.blit(self.image, (int(self.x - 20), int(self.y - 20)))
+            elif self.x > 1200:
+                count_death_mob += 1
+                print(count_death_mob)
+                self.true = False
+            elif self.y <= 320 and self.x >= 747:
+                self.x += self.v * self.clock.tick() / 250
+                screen.blit(self.image, (int(self.x - 20), int(self.y - 20)))
+            elif self.x >= 747:
+                self.y -= self.v * self.clock.tick() / 250
+                screen.blit(self.image, (int(self.x - 20), int(self.y - 20)))
+            elif self.y >= 447:
+                self.x += self.v * self.clock.tick() / 250
+                screen.blit(self.image, (int(self.x - 20), int(self.y - 20)))
+            elif self.x >= 433:
+                self.y += self.v * self.clock.tick() / 250
+                screen.blit(self.image, (int(self.x - 20), int(self.y - 20)))
+            elif self.y <= 185:
+                self.x += self.v * self.clock.tick() / 250
+                screen.blit(self.image, (int(self.x - 20), int(self.y - 20)))
+            elif self.x >= 200:
+                self.y -= self.v * self.clock.tick() / 250
+                screen.blit(self.image, (int(self.x - 20), int(self.y - 20)))
 
 
-v = 20
-clock = pygame.time.Clock()
-pos_x = -150
-pos_y = 380
-k = -150
-hero = Circle(-150, 380, 10)
-b = pygame.draw.circle(screen, (255, 0, 0), (int(pos_x), int(pos_y)), 10)
-g = False
+objects = []
 
+level1, level2, level3 = True, False, False
+
+
+def levels():
+    if level1:
+        for i in range(5):
+            objects.append(Circle(-50, 380, 10, v, clock))
+    if level2:
+        for i in range(5):
+            objects.append(Circle(-75, 380, 10, v + 10, clock))
+    if level3:
+        for i in range(5):
+            objects.append(Circle(-100, 380, 10, v + 20, clock))
+
+
+levels()
+
+
+def do_function(objects):
+   for object in objects:
+      object.move()
+
+
+a = True
 start_screen()
 running = True
 while running:
     screen.blit(backg, (0, 0))
     screen.blit(tower, (510, 180))
-    right, left, up, down = False, False, False, False
     for event in pygame.event.get():
-        if event.type == pygame.QUIT:
+        if event.type == pygame.QUIT or life <= 0:
             running = False
-    print(int(pos_x), int(pos_y))
-    if pos_x < 200:
-        right = True
-        hero.move()
-    elif pos_y <= 330 and pos_x >= 747:
-        up = False
-        right = True
-        hero.move()
-    elif pos_x >= 747:
-        right = False
-        up = True
-        hero.move()
-    elif pos_y >= 447:
-        down = False
-        right = True
-        hero.move()
-    elif pos_x >= 433:
-        right = False
-        down = True
-        hero.move()
-    elif pos_y <= 185:
-        up = False
-        right = True
-        hero.move()
-    elif pos_x >= 200:
-        right = False
-        up = True
-        hero.move()
+    if count_death_mob == 5:
+        text = font.render(f"Уровень {level + 1}", True, (0, 0, 0))
+        level1 = False
+        level2 = True
+        count_death_mob += 1
+        levels()
+    if count_death_mob == 11:
+        text = font.render(f"Уровень {level + 2}", True, (0, 0, 0))
+        level2 = False
+        level3 = True
+        count_death_mob += 1
+        levels()
+    if count_death_mob == 17:
+        text = font.render(f"Поздравляю вы победили!", True, (0, 0, 0))
+    screen.blit(text, (text_x, text_y))
+    do_function(objects)
     pygame.display.flip()
 pygame.quit()
