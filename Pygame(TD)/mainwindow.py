@@ -11,6 +11,7 @@ if __name__ == '__main__':
     pygame.init()
     pygame.font.init()
 
+
 size = width, height = 1200, 700
 screen = pygame.display.set_mode(size)
 clock = pygame.time.Clock()
@@ -18,6 +19,9 @@ clock = pygame.time.Clock()
 
 con = sqlite3.connect("pygame_TD.db")
 cur = con.cursor()
+
+swords = pygame.image.load("swords.png")
+swords = pygame.transform.scale(swords, (40, 40))
 
 white = pygame.image.load("white_end.jpg")
 white = pygame.transform.scale(white, (1200, 700))
@@ -135,11 +139,10 @@ def start_screen():
                   "Нажмите на любую кнопку мыши, чтобы начать",
                   "Введите никнейм перед тем как начать игру(без него она не начнется)"]
 
-    fon = pygame.transform.scale(load_image('staartscreen.jpg'), size)
+    fon = pygame.transform.scale(load_image('staaartscreen.jpg'), size)
     screen.blit(fon, (0, 0))
     font = pygame.font.Font(None, 30)
     text_coord = 150
-    screen.blit(hearts, (50, 50))
     for line in intro_text:
         string_rendered = font.render(line, True, (255, 255, 0))
         intro_rect = string_rendered.get_rect()
@@ -355,7 +358,7 @@ while running:
             if event.pos[0] >= 367 and event.pos[0] <= 398 and event.pos[1] >= 653 and event.pos[1] <= 681 \
                     and count_death_mob != 66:
                 if coins >= 1:
-                    upgrade += 20
+                    upgrade += 1
                     damage = upgrade * 1
                     coins -= 1
                     max_damage = max(max_damage, damage)
@@ -364,7 +367,7 @@ while running:
             elif event.pos[0] >= 415 and event.pos[0] <= 444 and event.pos[1] >= 652 and event.pos[1] <= 683 \
                     and count_death_mob != 66:
                 if coins >= 5:
-                    upgrade += 5
+                    upgrade += 6
                     damage = upgrade * 1
                     coins -= 5
                     max_damage = max(max_damage, damage)
@@ -396,6 +399,9 @@ while running:
         screen.blit(text_life, (text_x + 60, text_y + 40))
         text_coins = font.render(f"{coins}", True, (255, 255, 0))
         screen.blit(text_coins, (text_x + 150, text_y + 40))
+        screen.blit(swords, (text_x + 180, text_y + 39))
+        text_damage = font.render(f"{damage}", True, (150, 75, 0))
+        screen.blit(text_damage, (text_x + 230, text_y + 39))
 
         if coins_animation_counter == 36:
             coins_animation_counter = 0
@@ -411,48 +417,42 @@ while running:
             level1 = False
             level2 = True
             count_death_mob += 1
-            damage = 1 * upgrade
             levels()
         if count_death_mob == 13:
             text = font.render(f"Уровень {level + 2}", True, (0, 0, 0))
             level2 = False
             level3 = True
             count_death_mob += 1
-            damage = 1 * upgrade
             levels()
         if count_death_mob == 23:
             text = font.render(f"Уровень {level + 3}", True, (0, 0, 0))
             level3 = False
             level4 = True
             count_death_mob += 1
-            damage = 1 * upgrade
             levels()
         if count_death_mob == 35:
             text = font.render(f"Уровень {level + 4}", True, (0, 0, 0))
             level4 = False
             level5 = True
             count_death_mob += 1
-            damage = 1 * upgrade
             levels()
         if count_death_mob == 49:
             text = font.render(f"Уровень {level + 5}", True, (0, 0, 0))
             level5 = False
             level6 = True
             count_death_mob += 1
-            damage = 1 * upgrade
             levels()
         if count_death_mob == 66:
             text = font.render(f"""Вы победили!""", True, (0, 0, 0))
             text4 = font.render(f"""Максимальный урон {max_damage}""", True, (0, 0, 0))
-            text3 = font.render(f"""Текущее время прохождения {round(timer_end, 3)}""", True, (255, 255, 255))
+            text3 = font.render(f"""Текущее время прохождения {round(timer_end, 3)} секунд""", True, (0, 0, 0))
             text_x = width // 3
-            print(timer_end)
             screen.blit(text4, (width // 4.5, 600))
             screen.blit(text3, (width // 4.5, 100))
         screen.blit(text, (text_x, text_y))
         do_function(objects)
     elif life == -1:
-        text3 = font.render(f"""Текущее время прохождения {round(timer_end, 3)}""", True, (255, 255, 255))
+        text3 = font.render(f"""Текущее время прохождения {round(timer_end, 3)} секунд""", True, (255, 255, 255))
         text4 = font.render(f"""Максимальный урон {max_damage}""", True, (255, 255, 255))
         pygame.draw.rect(screen, (255, 255, 255), (200, 150, 100, 50))
         screen.blit(endscreen, (0, 0))
