@@ -12,6 +12,38 @@ if __name__ == '__main__':
     pygame.font.init()
 
 
+def load_image(name, colorkey=None):
+    fullname = os.path.join('data', name)
+    if not os.path.isfile(fullname):
+        print(f"Файл с изображением '{fullname}' не найден")
+        sys.exit()
+    image = pygame.image.load(fullname)
+    if colorkey is not None:
+        image = image.convert()
+        if colorkey == -1:
+            colorkey = image.get_at((0, 0))
+        image.set_colorkey(colorkey)
+    else:
+        image = image.convert_alpha()
+    return image
+
+
+def load_image1(name, colorkey=None):
+    fullname = os.path.join('images', name)
+    if not os.path.isfile(fullname):
+        print(f"Файл с изображением '{fullname}' не найден")
+        sys.exit()
+    image = pygame.image.load(fullname)
+    if colorkey is not None:
+        image = image.convert()
+        if colorkey == -1:
+            colorkey = image.get_at((0, 0))
+        image.set_colorkey(colorkey)
+    else:
+        image = image.convert_alpha()
+    return image
+
+
 size = width, height = 1200, 700
 screen = pygame.display.set_mode(size)
 clock = pygame.time.Clock()
@@ -20,11 +52,9 @@ clock = pygame.time.Clock()
 con = sqlite3.connect("pygame_TD.db")
 cur = con.cursor()
 
-swords = pygame.image.load("swords.png")
+swords = load_image1("swords.png")
 swords = pygame.transform.scale(swords, (40, 40))
 
-white = pygame.image.load("white_end.jpg")
-white = pygame.transform.scale(white, (1200, 700))
 
 endscreen = pygame.image.load("endscreen.jpg")
 endscreen = pygame.transform.scale(endscreen, (1200, 700))
@@ -33,62 +63,88 @@ backg = pygame.image.load("pageTD.png")
 backg = pygame.transform.scale(backg, (1200, 700))
 screen.blit(backg, (0, 0))
 
-tower = pygame.image.load("pngwing.com.png")
+tower = load_image1("pngwing.com.png")
 tower = pygame.transform.scale(tower, (200, 200))
 screen.blit(tower, (510, 180))
 
-tower1 = pygame.image.load("pngwing.com.png")
+tower1 = load_image1("pngwing.com.png")
 tower1 = pygame.transform.scale(tower1, (200, 200))
 screen.blit(tower1, (50, 450))
 
-tower2 = pygame.image.load("pngwing.com.png")
+tower2 = load_image1("pngwing.com.png")
 tower2 = pygame.transform.scale(tower2, (200, 200))
 screen.blit(tower2, (1100, 194))
 
-upgrade_button = pygame.image.load("upgrade.png")
+ar1 = load_image1("ar1.png")
+ar1 = pygame.transform.scale(ar1, (50, 50))
+
+ar2 = load_image1("ar2.png")
+ar2 = pygame.transform.scale(ar2, (50, 50))
+
+ar3 = load_image1("ar3.png")
+ar3 = pygame.transform.scale(ar3, (50, 50))
+
+ar4 = load_image1("ar4.png")
+ar4 = pygame.transform.scale(ar4, (50, 50))
+
+ar5 = load_image1("ar5.png")
+ar5 = pygame.transform.scale(ar5, (50, 50))
+
+ar6 = load_image1("ar6.png")
+ar6 = pygame.transform.scale(ar6, (50, 50))
+
+upgrade_button = load_image1("upgrade.png")
 upgrade_button = pygame.transform.scale(upgrade_button, (26, 26))
 screen.blit(upgrade_button, (width // 3, height - 25))
 
-hearts = pygame.image.load("hearts.png")
+hearts = load_image1("hearts.png")
 hearts = pygame.transform.scale(hearts, (50, 50))
 
-little_heart = pygame.image.load("heart1.png")
+little_heart = load_image1("heart1.png")
 little_heart = pygame.transform.scale(little_heart, (26, 26))
 
-heart1 = pygame.image.load("heart1.png")
+heart1 = load_image1("heart1.png")
 heart1 = pygame.transform.scale(heart1, (50, 50))
 
-heart2 = pygame.image.load("heart2.png")
+heart2 = load_image1("heart2.png")
 heart2 = pygame.transform.scale(heart2, (50, 50))
 
-heart3 = pygame.image.load("heart3.png")
+heart3 = load_image1("heart3.png")
 heart3 = pygame.transform.scale(heart3, (50, 50))
 
-upgrade_button_bar = pygame.image.load("upgrade_bar_with_green.png")
+upgrade_button_bar = load_image1("upgrade_bar_with_green.png")
 upgrade_button_bar = pygame.transform.scale(upgrade_button_bar, (175, 66))
 
-coins = pygame.image.load("coins.png")
+coins = load_image1("coins.png")
 coins = pygame.transform.scale(coins, (200, 100))
 
-coin1 = pygame.image.load("coin1.png")
+coin1 = load_image1("coin1.png")
 coin1 = pygame.transform.scale(coin1, (50, 50))
 
-coin2 = pygame.image.load("coin2.png")
+coin2 = load_image1("coin2.png")
 coin2 = pygame.transform.scale(coin2, (50, 50))
 
-coin3 = pygame.image.load("coin3.png")
+coin3 = load_image1("coin3.png")
 coin3 = pygame.transform.scale(coin3, (50, 50))
 
-coin4 = pygame.image.load("coin4.png")
+coin4 = load_image1("coin4.png")
 coin4 = pygame.transform.scale(coin4, (50, 50))
 
-coin5 = pygame.image.load("coin5.png")
+coin5 = load_image1("coin5.png")
 coin5 = pygame.transform.scale(coin5, (50, 50))
 
-coin6 = pygame.image.load("coin6.png")
+coin6 = load_image1("coin6.png")
 coin6 = pygame.transform.scale(coin6, (50, 50))
 
 coins_animation = [coin1, coin2, coin3, coin4, coin5, coin6]
+
+archer_animation1 = [ar1, ar2, ar3, ar4, ar5, ar6]
+archer_animation2 = [ar1, ar2, ar3, ar4, ar5, ar6]
+archer_animation3 = [ar1, ar2, ar3, ar4, ar5, ar6]
+
+archer_counter1 = 0
+archer_counter2 = 0
+archer_counter3 = 0
 coins_animation_counter = 0
 
 all_sprites = pygame.sprite.Group()
@@ -117,6 +173,7 @@ need_input = True
 input_text = ''
 nickname = ''
 
+
 def terminate():
     pygame.quit()
     sys.exit()
@@ -144,7 +201,7 @@ def start_screen():
     font = pygame.font.Font(None, 30)
     text_coord = 150
     for line in intro_text:
-        string_rendered = font.render(line, True, (255, 255, 0))
+        string_rendered = font.render(line, True, (0, 0, 0))
         intro_rect = string_rendered.get_rect()
         text_coord += 10
         intro_rect.top = text_coord
@@ -171,27 +228,9 @@ def start_screen():
                 return
         pygame.display.flip()
 
-def end_screen():
-    screen.blit(white, (0, 0))
-
-def load_image(name, colorkey=None):
-    fullname = os.path.join('data', name)
-    if not os.path.isfile(fullname):
-        print(f"Файл с изображением '{fullname}' не найден")
-        sys.exit()
-    image = pygame.image.load(fullname)
-    if colorkey is not None:
-        image = image.convert()
-        if colorkey == -1:
-            colorkey = image.get_at((0, 0))
-        image.set_colorkey(colorkey)
-    else:
-        image = image.convert_alpha()
-    return image
-
 
 class Circle():
-    image_1 = pygame.transform.scale(pygame.image.load('i.png'), (50, 50))
+    image_1 = pygame.transform.scale(load_image1('i.png'), (50, 50))
 
     def __init__(self, x, y, health, v, clock):
         self.x = x
@@ -203,9 +242,12 @@ class Circle():
         self.image = Circle.image_1
         self.mask = pygame.mask.from_surface(self.image)
         self.true = True
+        self.attack1 = False
+        self.attack2 = False
+        self.attack3 = False
 
     def move(self):
-        global count_death_mob, damage, life
+        global count_death_mob, damage, life, archer_counter1, archer_counter2, archer_counter3
         if self.true:
             if self.x < 200:
                 self.x += self.v * 0.05
@@ -237,14 +279,32 @@ class Circle():
             if self.x >= 370 and self.x <= 850 and self.y >= 130 and self.y <= 610:
                 if objects.index(self) == 0:
                     self.health -= damage
+                    if archer_counter2 == 36:
+                        archer_counter2 = 0
+                    screen.blit(archer_animation2[archer_counter2 // 6], (590, 188))
+                    archer_counter2 += 1
+            else:
+                screen.blit(archer_animation2[-1], (590, 188))
 
-            if self.x >= 0 and self.x <= 370 and self.y >= 320:
+            if self.x >= 0 and self.x <= 370 and self.y >= 130:
                 if objects.index(self) == 0:
                     self.health -= damage
+                    if archer_counter1 == 36:
+                        archer_counter1 = 0
+                    screen.blit(archer_animation1[archer_counter1 // 6], (130, 460))
+                    archer_counter1 += 1
+            else:
+                screen.blit(archer_animation1[-1], (130, 460))
 
             if self.x >= 850:
                 if objects.index(self) == 0:
                     self.health -= damage
+                    if archer_counter3 == 36:
+                        archer_counter3 = 0
+                    screen.blit(archer_animation3[archer_counter3 // 6], (970, 86))
+                    archer_counter3 += 1
+            else:
+                screen.blit(archer_animation1[-1], (970, 86))
 
     def get_damage(self):
         global count_death_mob, coins
@@ -267,7 +327,7 @@ damage = 1 * upgrade
 life = 10
 v = 20
 level1, level2, level3, level4, level5, level6 = False, False, False, False, False, False
-
+lock = True
 
 def levels():
     if level1:
@@ -323,6 +383,7 @@ def do_function(objects1):
 running = True
 start_screen()
 timer_end = 0
+nickname_game = font.render(f'Ваш никнейм: {nickname}', True, (0, 0, 0))
 print(nickname)
 while running:
     screen.blit(backg, (0, 0))
@@ -402,6 +463,7 @@ while running:
         screen.blit(swords, (text_x + 180, text_y + 39))
         text_damage = font.render(f"{damage}", True, (150, 75, 0))
         screen.blit(text_damage, (text_x + 230, text_y + 39))
+        screen.blit(nickname_game, (10, 70))
 
         if coins_animation_counter == 36:
             coins_animation_counter = 0
@@ -444,20 +506,30 @@ while running:
             levels()
         if count_death_mob == 66:
             text = font.render(f"""Вы победили!""", True, (0, 0, 0))
-            text4 = font.render(f"""Максимальный урон {max_damage}""", True, (0, 0, 0))
             text3 = font.render(f"""Текущее время прохождения {round(timer_end, 3)} секунд""", True, (0, 0, 0))
             text_x = width // 3
-            screen.blit(text4, (width // 4.5, 600))
             screen.blit(text3, (width // 4.5, 100))
         screen.blit(text, (text_x, text_y))
         do_function(objects)
     elif life == -1:
-        text3 = font.render(f"""Текущее время прохождения {round(timer_end, 3)} секунд""", True, (255, 255, 255))
+        lock = False
+        cuery = 'SELECT nickname, passage_time FROM Data_player'
+        a = cur.execute(cuery).fetchall()
+        a = sorted(a, key=lambda tup: tup[1])
+        best_text = font.render("ЛУЧШИЕ РЕЗУЛЬТАТЫ", True, (255, 255, 255))
+        text_1 = font.render(f"1. {a[0][0]} {a[0][1]}", True, (255, 255, 255))
+        text_2 = font.render(f"2. {a[1][0]} {a[1][1]}", True, (255, 255, 255))
+        text_2_3 = font.render(f"3. {a[2][0]} {a[2][1]}", True, (255, 255, 255))
+        text3 = font.render(f"""Текущее время прохождения(неудача) {round(timer_end, 3)} секунд""", True, (255, 255, 255))
         text4 = font.render(f"""Максимальный урон {max_damage}""", True, (255, 255, 255))
         pygame.draw.rect(screen, (255, 255, 255), (200, 150, 100, 50))
         screen.blit(endscreen, (0, 0))
-        screen.blit(text3, (width // 4.5, 500))
-        screen.blit(text4, (width // 4.5, 550))
+        screen.blit(text3, (width // 12, 500))
+        screen.blit(text4, (width // 12, 550))
+        screen.blit(best_text, (width // 12, 20))
+        screen.blit(text_1, (width // 12, 50))
+        screen.blit(text_2, (width // 12, 80))
+        screen.blit(text_2_3, (width // 12, 110))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -473,5 +545,7 @@ while running:
         screen.blit(text1, (text_x, text_y + 40))
         screen.blit(text, (text_x, text_y))
     pygame.display.flip()
-cur.execute(f'INSERT INTO Data_player(passage_time, nickname) VALUES("{round(timer_end, 3)}", "{nickname}")')
+if int(timer_end) > 0 and lock:
+    cur.execute(f'INSERT INTO Data_player(passage_time, nickname) VALUES("{round(timer_end, 3)}", "{nickname}")')
+    con.commit()
 pygame.quit()
