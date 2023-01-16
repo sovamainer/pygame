@@ -396,7 +396,7 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         elif event.type == pygame.MOUSEBUTTONDOWN and life == 0:
-            life = 3
+            life = 10
             count_death_mob = -1
             upgrade = 2
             damage = 1 * upgrade
